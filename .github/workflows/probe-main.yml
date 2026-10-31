@@ -1,0 +1,16 @@
+name: probe-main
+on:
+  workflow_run:
+    workflows: ["ci"]
+    types: [completed]
+    branches: [ main ]
+permissions:
+  contents: read
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "PROBE=MAINFILTER ref=${{ github.ref }} sha=${{ github.sha }}"
+          echo "WR_HEAD_BRANCH=${{ github.event.workflow_run.head_branch }}"
+          echo "WR_EVENT=${{ github.event.workflow_run.event }}"
