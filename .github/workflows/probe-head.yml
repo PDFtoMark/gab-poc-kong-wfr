@@ -1,0 +1,17 @@
+name: probe-head
+on:
+  workflow_run:
+    workflows: ["ci"]
+    types: [completed]
+    branches: [ poc-head ]
+permissions:
+  contents: read
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "PROBE=HEAD ref=${{ github.ref }} sha=${{ github.sha }}"
+          echo "WR_HEAD_BRANCH=${{ github.event.workflow_run.head_branch }}"
+          echo "WR_HEAD_SHA=${{ github.event.workflow_run.head_sha }}"
+          echo "WR_EVENT=${{ github.event.workflow_run.event }}"
