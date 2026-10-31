@@ -10,8 +10,15 @@ jobs:
   p:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "PROBE=HEAD ref=${{ github.ref }} sha=${{ github.sha }}"
+      - name: ctx
+        run: |
+          echo "REF=${{ github.ref }}"
+          echo "SHA=${{ github.sha }}"
           echo "WR_HEAD_BRANCH=${{ github.event.workflow_run.head_branch }}"
           echo "WR_HEAD_SHA=${{ github.event.workflow_run.head_sha }}"
           echo "WR_EVENT=${{ github.event.workflow_run.event }}"
+      - uses: actions/checkout@v5
+      - name: checked out content
+        run: |
+          echo "VERSIONFILE=$(cat version.txt)"
+          echo "CIFILE_MARKER=$(grep -c 'poc-head' .github/workflows/ci.yml || true)"
