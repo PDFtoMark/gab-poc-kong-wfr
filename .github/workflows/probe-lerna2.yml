@@ -1,0 +1,19 @@
+name: probe-lerna2
+on:
+  workflow_dispatch:
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "PATH=$PATH"
+          echo "--- npm global ---"
+          npm ls -g --depth=0 2>&1 | head -20
+          echo "--- npm root -g ---"
+          R=$(npm root -g); echo "ROOT=$R"; ls "$R" 2>&1 | head -30
+          echo "--- find lerna bins ---"
+          ls /usr/local/bin | grep -i ler || echo "no lerna in /usr/local/bin"
+          find /opt -maxdepth 4 -name "lerna*" 2>/dev/null | head
+          echo "--- lerna version probe ---"
+          lerna --version 2>&1 | head -3
+          lsb_release -a 2>/dev/null | head -3
