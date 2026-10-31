@@ -1,0 +1,16 @@
+name: probe-lerna
+on:
+  workflow_dispatch:
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "which_lerna=$(command -v lerna || echo NONE)"
+          changed=$(lerna changed || true)
+          echo "changed=[$changed]"
+      - uses: actions/checkout@v5
+      - run: |
+          echo "which_lerna_repo=$(command -v lerna || echo NONE)"
+          changed=$(lerna changed || true)
+          echo "changed_repo=[$changed]"
