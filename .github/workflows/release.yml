@@ -1,0 +1,28 @@
+name: Release
+on:
+  workflow_run:
+    workflows: ["ci"]
+    types: [completed]
+    branches: [ main ]
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Context
+        run: |
+          echo "REF=${{ github.ref }}"
+          echo "SHA=${{ github.sha }}"
+          echo "WR_HEAD_BRANCH=${{ github.event.workflow_run.head_branch }}"
+          echo "WR_HEAD_SHA=${{ github.event.workflow_run.head_sha }}"
+          echo "WR_EVENT=${{ github.event.workflow_run.event }}"
+          echo "WR_HEAD_REPO=${{ github.event.workflow_run.head_repository.full_name }}"
+      - uses: actions/checkout@v5
+      - name: What got checked out
+        run: |
+          echo "--- version.txt ---"
+          cat version.txt || echo "missing"
+          echo "--- ci.yml first line ---"
+          head -3 .github/workflows/ci.yml
